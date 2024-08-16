@@ -6,6 +6,7 @@ programa
 	inclua biblioteca Tipos --> t
 	inclua biblioteca Texto --> te
 	inclua biblioteca Util --> u
+	inclua biblioteca Matematica --> m
 
 // Todas as nossas variáveis informadas pelo "TAMANHO" para se ouver alguma mudança,
 // só mudarmos uma variável!
@@ -122,19 +123,41 @@ programa
 			}			
 	}	
 	funcao editarDados(){
-		inteiro id
+		cadeia id	
+		inteiro idReal	= -1
 // Errou alguma letra do seu nome, cpf ou salário? sem problemas! Aqui oferecemos a opção de edição! 
 // Através de um código simples baseado em sobreposição de variável			
 		para (inteiro i = 0; i < TAMANHO; i++) {
-			escreva("ID: ", i, "\tNome: ", nomeVetor[i], "\tCpf: ", cpfVetor[i], "\tSalário bruto: ", salarioBruto[i], "\n")	//exibe uma lista dos vetores
-			u.aguarde(1200)
+			se(nomeVetor[i] != "")
+			{
+				escreva("ID: ", i, "\tNome: ", nomeVetor[i], "\tCpf: ", cpfVetor[i], "\tSalário bruto: ", salarioBruto[i], "\n")
+			}//exibe uma lista dos vetores
 		}
 
 		escreva("Digite um ID: \n")
 		leia(id)
-		// Aqui pesquisamos um ID! Cada colaborador tem o seu, facilitando a edição de dados!
 
 		cadeia resposta = "1"
+		
+		// Aqui pesquisamos um ID! Cada colaborador tem o seu, facilitando a edição de dados!
+		para (inteiro i = 0; i < TAMANHO; i++) {
+			se(t.cadeia_e_inteiro(id, 10) == verdadeiro)
+			{
+				idReal = t.cadeia_para_inteiro(id, 10)				
+			}senao {
+				escreva("Digite um valor válido.")
+				u.aguarde(1200)
+				resposta = "0"
+				pare
+			}
+			se(nomeVetor[idReal] == "")
+			{
+				escreva("Cadastro inexistente\n")
+				u.aguarde(1200)
+				resposta = "0"
+				pare			
+			}						
+		}
 		inteiro respostaInteiro = 0
 		enquanto (resposta != "0") 
 		{
@@ -146,12 +169,12 @@ programa
 			se(t.cadeia_e_inteiro(resposta, 10) == verdadeiro)
 			//verifica se foram digitados apenas números
 			{
-				respostaInteiro = t.cadeia_para_inteiro(resposta, 10)
-				//transforma em inteiro
-			}senao {
+				respostaInteiro = t.cadeia_para_inteiro(resposta, 10)	//transforma em inteiro
+			}senao 
+			{
 				escreva("Comando inválido. \n")
 				u.aguarde(1200)
-				} 
+			} 
 
 			escolha (respostaInteiro)
 			{
@@ -159,9 +182,9 @@ programa
 					pare 
 				
 				caso 1:
-					escreva("Nome atual: ", nomeVetor[id], ". Insira o novo nome: \n")
+					escreva("Nome atual: ", nomeVetor[idReal], ". Insira o novo nome: \n")
 					leia(novoNome)
-					nomeVetor[id] = novoNome	
+					nomeVetor[idReal] = novoNome	
 					escreva("\nNome editado com sucesso.\n")
 					u.aguarde(1200)// Substituimos o nome errado pelo certo!
 					pare
@@ -169,11 +192,11 @@ programa
 				caso 2:
 					// Oferecemos assim como a opção de Edição de nome, a de CPF também!
 					// com o mesmo estilo de código através da sobreposição!				
-					escreva("CPF atual: ", cpfVetor[id], ". Insira o novo CPF: \n")
+					escreva("CPF atual: ", cpfVetor[idReal], ". Insira o novo CPF: \n")
 					leia(novoCPF)	
 					se (t.cadeia_e_inteiro(novoCPF, 10) == verdadeiro) // Verifica se foram digitados apenas números
 					{
-						cpfVetor[id] = novoCPF     
+						cpfVetor[idReal] = novoCPF     
 						escreva("\nCPF editado com sucesso.\n")
 						u.aguarde(1200)								
 					}senao 
@@ -185,7 +208,7 @@ programa
 					pare			
 					
 				caso 3:
-					escreva("Salário atual: ", salarioBruto[id], ". Insira o novo salário: \n")
+					escreva("Salário atual: ", salarioBruto[idReal], ". Insira o novo salário: \n")
 					leia(novoSalario)
 					// E se por acaso você errar seu salário, também editamos aqui mesmo!
 					// Usando da mesma técnica para substituir o erro!
@@ -194,7 +217,7 @@ programa
 					// Verifica se foram digitados apenas números
 					{
 						real novoSalarioReal = t.cadeia_para_real(novoSalario)
-						salarioBruto[id] = novoSalarioReal
+						salarioBruto[idReal] = novoSalarioReal
 						escreva("\nSalário editado com sucesso.\n")
 						u.aguarde(1200)						
 					}senao {
@@ -211,8 +234,7 @@ programa
 
 	funcao registrarPonto() {
 		cadeia cpfColaborador
-	// Nesse local do código, Registramos o ponto de entrada e saída do funcionário através do CPF!
-				
+	// Nesse local do código, Registramos o ponto de entrada e saída do funcionário através do CPF!				
 		escreva("Digite o CPF do colaborador: \n")
 		leia(cpfColaborador)
 
@@ -226,16 +248,24 @@ programa
 				
 				escreva("\nDigite a hora de entrada (Ex.: 09:30)\n")
 				leia(entradaHora)
-
-				real entradaH = separarHoras(entradaHora)				
-				real entradaM = separarMinutos(entradaHora)
+				
+				real entradaH = 0.0
+				real entradaM = 0.0
+				se(te.numero_caracteres(entradaHora) == 5)
+				{
+					entradaH = separarHoras(entradaHora)				
+					entradaM = separarMinutos(entradaHora)
+				}senao {
+					escreva("Entre com as horas no formato 00:00.")
+					u.aguarde(1200)
+					pare					
+				}
 					
 				escreva("\nDigite a hora de saída (Ex.: 18:00)\n")					
 				leia(saidaHora)
 				
 				real saidaH = separarHoras(saidaHora)
-				real saidaM = separarMinutos(saidaHora)
-				
+				real saidaM = separarMinutos(saidaHora)				
 				real tempoEmMinutos = (saidaH * 60) + saidaM - (entradaH * 60) - entradaM	 //faz as contas dos minutos trabalhados		
 
 				somaHorasTrab += tempoEmMinutos //soma os minutos acrescentados com os que já existiam no vetor
@@ -248,8 +278,7 @@ programa
 				real minutosFinal = (horas - horasInteiro)*60
 				inteiro minFinalInteiro = t.real_para_inteiro(minutosFinal)
 				escreva("Nome do colaborador: ", nomeVetor[i], "\tTempo trabalhado: ", horasInteiro, " horas e ", minFinalInteiro, " minutos\n")	//relatorio de horas trabalhadas
-			}
-				//u.aguarde(1200)
+			}				
 		}
 	}
 
@@ -285,7 +314,10 @@ programa
 			}
 	// E para cálculo do desconto IRRF usamos da mesma fórmula, apenas mudando os valores!			
 			salarioLiquido[i] =  salarioBruto[i] - descontoInss - descontoIRRF
-			escreva("Nome do colaborador: ", nomeVetor[i], "\tSalário bruto: ", salarioBruto[i], "\tSalário líquido: ", salarioLiquido[i], "\n") //relatorio de pagamento
+			se(nomeVetor[i] != "")
+			{
+				escreva("Nome do colaborador: ", nomeVetor[i], "\tSalário bruto: ", salarioBruto[i], "\tSalário líquido: ", m.arredondar(salarioLiquido[i], 2), "\n")
+			} //relatorio de pagamento
 			i++
 		}		
 			u.aguarde(1200)
@@ -299,11 +331,14 @@ programa
 			inteiro horasInteiro = t.real_para_inteiro(horas)
 			real minutosFinal = (horas - horasInteiro)*60
 			inteiro minFinalInteiro = t.real_para_inteiro(minutosFinal)
-
-			escreva("\nNome do colaborador: ", nomeVetor[i], "\tCPF: ", cpfVetor[i],"\tTempo trabalhado: ", horasInteiro, " horas e ", minFinalInteiro, " minutos \tSalário bruto: ", salarioBruto[i])
+			
+			se (nomeVetor[i] != "")
+			{
+				escreva("\nNome do colaborador: ", nomeVetor[i], "\tCPF: ", cpfVetor[i],"\tTempo trabalhado: ", horasInteiro, " horas e ", minFinalInteiro, " minutos \tSalário bruto: ", salarioBruto[i])
+			}
 			// Aqui é a função em que exibimos os relatórios com nome, CPF, Salário Bruto, e salário líquido!			
 			se (salarioLiquido[i] != 0.0) {
-				escreva("\tSalário líquido: ", salarioLiquido[i], "\n") 
+				escreva("\tSalário líquido: ", m.arredondar(salarioLiquido[i], 2), "\tDescontos totais: ", m.arredondar(salarioBruto[i] - salarioLiquido[i], 2), "\n") 
 			}
 			i++
 		}
@@ -327,7 +362,7 @@ programa
  * Esta seção do arquivo guarda informações do Portugol Studio.
  * Você pode apagá-la se estiver utilizando outro editor.
  * 
- * @POSICAO-CURSOR = 8898; 
+ * @POSICAO-CURSOR = 12299; 
  * @PONTOS-DE-PARADA = ;
  * @SIMBOLOS-INSPECIONADOS = ;
  * @FILTRO-ARVORE-TIPOS-DE-DADO = inteiro, real, logico, cadeia, caracter, vazio;
