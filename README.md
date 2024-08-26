@@ -1,5 +1,13 @@
 # Trabalho-Logica-programa-o
 
+### Integrantes do Grupo
+- Heytor Pinel Cantelmo da Silva
+- Eduarda Pinho dos Santos
+- Gabriel dos Santos Siqueira 
+- Lucas Branco Berlim da Cunha
+- Fernanda Canto Pereira da Costa
+- Lucas Lois Florêncio Pires
+
 # Programa de Departamento Pessoal em Portugol
 
 Este repositório contém um projeto de um sistema de Departamento Pessoal, desenvolvido para fins acadêmicos. O sistema permite o cadastro de colaboradores, controle de ponto, cálculo da folha de pagamento, e geração de relatórios completos.
